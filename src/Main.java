@@ -129,6 +129,7 @@ public class Main {
     }
 
     // O(n + k), где n - количество элементов, k - размер диапазона значений
+    // О(n) - если k > n
     public static int[] countingSort(int[] array){
         long startTime = System.nanoTime();
 
@@ -151,7 +152,7 @@ public class Main {
         //Создаем временный массив для подсчета частоты встречаемости
         int[] countArray = new int[range];
         for(int value : array){
-            countArray[value - min]++;
+            countArray[value - min]++; //Смотрим как часто встречается элемент и ставим его в ячейку value - min
         }
 
         // Восстанавливаем отсортированный массив из временного массива
@@ -233,9 +234,9 @@ public class Main {
         //Слияние отсортированных блоков. Начинаем слияние с мини-блоков (minrun) и удваиваем размер блоков
         //на каждой итерации.
         for (int size = minrun; size < n; size = 2 * size) {
-            for (int left = 0; left < n; left += 2 * size) { //проходит по массиву и сливает отсортированные блоки размером size
-                int mid = left + size - 1;
-                int right = Math.min((left + 2 * size - 1), (n - 1));
+            for (int left = 0; left < n; left += 2 * size) { //Проходит по массиву и сливает отсортированные блоки размером size. Переменная left представляет начало текущего блока.
+                int mid = left + size - 1; //индекс середины текущего блока.
+                int right = Math.min((left + 2 * size - 1), (n - 1)); //Индекс конца текущего блока. Если размер блока превышает size, то right ограничивается размером массива n - 1.
 
                 if (mid < right) {
                     mergeSort(array);
@@ -298,7 +299,8 @@ public class Main {
     }
 
 
-    //O(n)          LSD Version)) - least significant digit
+    //O(n)                     LSD Version)) - least significant digit
+    //O(n^2) - Если число цифр в наибольшем элементе равно n
     public static int[] radixSort(int[] array){
         long startTime = System.nanoTime();
         radixSort(array, array.length); //На каждом шаге будем сортировать числа чтобы они были отсортированы по первым k * i битам, где k – некоторая константа.
@@ -338,7 +340,8 @@ public class Main {
         }
     }
 
-    //О(n^2)
+    //О(n^2) - в худшем случае
+    //O(nlog(n)) для наилучшего случая
     public static int[] combSort(int[] array) {
         long startTime = System.nanoTime();
         int gap = array.length; //Выступает в роли шага
